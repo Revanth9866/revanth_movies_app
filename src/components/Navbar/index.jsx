@@ -1,8 +1,12 @@
 import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
-import {AppBar,Box,Toolbar,Typography,InputBase} from '@mui/material';
+import { AppBar, Box, Toolbar, Typography, InputBase } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import SelectorComponent from '../SelectorComponent';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSearchValue } from '../../slice/movieSlice';
+import { Link } from 'react-router-dom';
+import {Button} from '@mui/material';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -46,15 +50,20 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Navbar() {
- 
+
+  const dispatch = useDispatch();
+
+  const { genres, Rating } = useSelector(state => state.movies)
+
+  const onSearchChange = (e) => {
+    dispatch(setSearchValue(e.target.value))
+  }
+
+  console.log(genres)
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          
-        
-           
-          
           <Typography
             variant="h6"
             noWrap
@@ -63,7 +72,7 @@ export default function Navbar() {
           >
             Movies App
           </Typography>
-          <Search>
+          <Search onChange={onSearchChange}>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -75,18 +84,21 @@ export default function Navbar() {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
 
-            <SelectorComponent/>
-            <SelectorComponent/>
-           
+            <Button color="inherit" component={Link} to="/favorites">
+              Favorites
+            </Button>
+
+            <SelectorComponent name='Genres' value={genres} type="genre" />
+            <SelectorComponent name='Ratings' value={Rating} type="rating" />
+
 
           </Box>
-          
-          
-         
+
+
+
         </Toolbar>
       </AppBar>
-      {/* {renderMobileMenu}
-      {renderMenu} */}
+
     </Box>
   );
 }
