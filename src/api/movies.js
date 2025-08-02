@@ -24,7 +24,7 @@ export const getMoviesByGenre = () => async dispatch => {
     // dispatch(setGenres(movies));
 
     // Extract and deduplicate genres
-    const allGenres = movies.flatMap(movie => movie.Genre || []);
+    const allGenres = movies.flatMap(movie => movie.Genre);
     const individualGenres = [...new Set(allGenres.flatMap(g => g.split(',').map(s => s.trim())))].sort();
 
     dispatch(setGenres(individualGenres));
@@ -39,11 +39,11 @@ export const getMoviesByRating = () => async dispatch => {
     const response = await axios.get(BaseUrl);
     const movies = response.data.movies;
 
-    const allRatings = movies.flatMap(movie => movie.imdbRating || []);
+    const allRatings = movies.flatMap(movie => movie.imdbRating );
     const individualRating = [...new Set(allRatings.flatMap(g => g.split(',').map(s => s.trim())))].sort();
 
     dispatch(setImdbRating(individualRating));
-    
+
   } catch (err) {
     console.error("Failed to fetch movies:", err);
   }

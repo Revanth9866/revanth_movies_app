@@ -1,29 +1,47 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import MovieCard from '../../components/movieCard';
+// src/pages/FavoriteComponent/index.jsx
 
-const Favorites = () => {
-  const favorites = useSelector(state => state.movies.favorites);
-  const allMovies = useSelector(state => state.movies.movies);
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getMovies } from "../../api/movies";
+import MovieCard from "../../components/movieCard";
+import { Box, Grid, Typography } from "@mui/material";
+import Navbar from "../../components/Navbar";
 
-  const favoriteMovies = allMovies.filter(movie =>
+const FavoriteComponent = () => {
+  const dispatch = useDispatch();
+  const { movies, favorites } = useSelector((state) => state.movies);
+
+  // Fetch movies if not already loaded
+  useEffect(() => {
+    if (movies.length === 0) {
+      dispatch(getMovies());
+    }
+  }, [dispatch, movies]);
+
+  // Map favorite IDs to full movie objects
+  const favoriteMovies = movies.filter((movie) =>
     favorites.includes(movie.imdbID)
   );
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>Favorite Movies</h2>
-      {favoriteMovies.length === 0 ? (
-        <p>No favorites yet.</p>
-      ) : (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
-          {favoriteMovies.map(movie => (
-            <MovieCard key={movie.imdbID} movie={movie} />
-          ))}
-        </div>
-      )}
-    </div>
+    <>
+      <Navbar />
+      <Box sx={{ flexGrow: 1, padding: 2 }}>
+        <Typography variant="h4" gutterBottom>
+          Favorite Movies
+        </Typography>
+        {favoriteMovies.length > 0 ? (
+          <Grid container spacing={2}>
+            {favoriteMovies.map((movie) => (
+              <MovieCard key={movie.imdbID} movie={movie} />
+            ))}
+          </Grid>
+        ) : (
+          <Typography variant="body1">No favorites added yet.</Typography>
+        )}
+      </Box>
+    </>
   );
 };
 
-export default Favorites;
+export default FavoriteComponent;

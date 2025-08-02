@@ -9,7 +9,7 @@ import { getMoviesBySearch } from "../../utils/getMoviesBySearch";
 const Home = () => {
 
     const dispatch = useDispatch();
-    const { movies, genres, searchValue, selectedGenre, selectedRating } = useSelector(state => state.movies);
+    const { movies, searchValue, selectedGenre, selectedRating } = useSelector(state => state.movies);
 
     const filterByMovieName = getMoviesBySearch(movies, searchValue);
 
@@ -26,15 +26,15 @@ const Home = () => {
 
     useEffect(() => {
         dispatch(getMovies());
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
         dispatch(getMoviesByGenre());
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => {
         dispatch(getMoviesByRating());
-    }, []);
+    }, [dispatch]);
 
 
     return (

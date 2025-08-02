@@ -7,7 +7,7 @@ const initialState = {
     searchValue: '',
     selectedGenre: '',
     selectedRating: '',
-    favorites: [],
+    favorites: JSON.parse(localStorage.getItem('favorites')) || [], // loading from loacl storage
 }
 
 export const movieSlice = createSlice({
@@ -40,6 +40,7 @@ export const movieSlice = createSlice({
             } else {
                 state.favorites.push(movieId);
             }
+            localStorage.setItem('favorites', JSON.stringify(state.favorites));
         }
 
     },
